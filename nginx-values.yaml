@@ -1,0 +1,12 @@
+controller:
+  hostPort:
+    enabled: true
+    ports:
+      http: 80
+  service:
+    type: NodePort
+  nodeSelector:
+    kubernetes.io/os: linux
+    ingress-ready: "true"
+  #deployment:
+  progressDeadlineSeconds: null
