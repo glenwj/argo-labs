@@ -1,0 +1,26 @@
+kubectl create namespace argocd
+
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# bcrypt(password)=$2a$10$rRyBsGSHK6.uc8fntPwVIuLVHgsAhAX7TcdrqW/RADU0uh7CaChLa
+kubectl -n argocd patch secret argocd-secret \
+ -p '{"stringData": {
+ "admin.password": "$2a$10$rRyBsGSHK6.uc8fntPwVIuLVHgsAhAX7TcdrqW/RADU0uh7CaChLa",
+ "admin.passwordMtime": "'$(date +%FT%T%Z)'"
+ }}'
+
+kubectl get all -n argocd
+
+kubectl patch svc argocd-server -n argocd --patch \
+ '{"spec": { "type": "NodePort", "ports": [ { "nodePort": 32100, "port": 443, "protocol": "TCP", "targetPort": 8080 } ] } }'
+
+ kubectl get nodes -o wide
+
+ Note IP address for one of the nodes and browse to https://NODEIP:32100
+https://172.18.0.3:32100
+
+actually for kind this localhost
+
+cd argo-labs
+kubectl delete -k staging/ -n staging
+kubectl delete -k prod/ -n prod 
